@@ -72,26 +72,23 @@ async def create_reservation(
     )
 
 
-@router.post(
-    '/reservations/{reservation_uid}/return', status_code=status.HTTP_201_CREATED, response_model=ReservationResponse
-)
+@router.delete('/reservations/{reservation_uid}', status_code=status.HTTP_204_NO_CONTENT)
+async def delete_reservation(
+    reservation_uid: UUID,
+    x_user_name: str = Header(),
+    repository: ReservationRepository = Depends(get_reservation_repository),
+) -> None:
+    await repository.delete_reservation(reservation_uid, x_user_name)
+
+
+@router.post('/reservations/{reservation_uid}/return', status_code=status.HTTP_204_NO_CONTENT)
 async def return_book(
     reservation_uid: UUID,
     reservation_request: ReservationUpdate,
     x_user_name: str = Header(),
     repository: ReservationRepository = Depends(get_reservation_repository),
-) -> ReservationResponse:
-    reservation: ReservationModel = await repository.update_reservation(
-        reservation_uid, x_user_name, reservation_request
-    )
-    return ReservationResponse(
-        **reservation.dict(exclude={'id', 'reservation_uid', 'book_uid', 'library_uid', 'start_date', 'till_date'}),
-        reservationUid=reservation.reservation_uid,
-        bookUid=reservation.book_uid,
-        libraryUid=reservation.library_uid,
-        startDate=reservation.start_date,
-        tillDate=reservation.till_date,
-    )
+) -> None:
+    await repository.update_reservation(reservation_uid, x_user_name, reservation_request)
 
 
 @router.get('/rented', status_code=status.HTTP_200_OK, response_model=RentedBooks)

@@ -46,6 +46,26 @@ class ReservationRepository:
 
         return ReservationModel.from_orm(new_reservation)
 
+    async def delete_reservation(self, reservation_uid: UUID, username: str) -> None:
+        query = (
+            select(Reservation.id)
+            .where(
+                Reservation.reservation_uid == reservation_uid,
+                Reservation.username == username,
+            )
+        )
+
+        session: AsyncSession = self._session_factory()
+        async with session, session.begin():
+            result = await session.execute(query)
+            reservations_ids = result.scalars().all()
+
+            await session.execute(
+                delete(Reservation)  # type: ignore
+                .where(Reservation.id.in_(reservations_ids))
+                .execution_options(synchronize_session=False)
+            )
+
     async def update_reservation(
             self, reservation_uid: UUID, username: str, reservation: ReservationUpdate
     ) -> ReservationModel:
