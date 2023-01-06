@@ -25,6 +25,16 @@ class ReservationConfig(BaseSettings):
         validate_assignment = True
 
 
+class CircuitBreakerConfig(BaseSettings):
+    failure_threshold: int = Field(env='CIRCUIT_BREAKER_FAILURE_THRESHOLD', default=2)
+    success_threshold: int = Field(env='CIRCUIT_BREAKER_SUCCESS_THRESHOLD', default=1)
+    timeout: int = Field(env='CIRCUIT_BREAKER_TIMEOUT', default=15)
+
+    class Config:
+        validate_assignment = True
+
+
 RATING_SYSTEM_CONFIG: RatingConfig = RatingConfig()
 LIBRARY_SYSTEM_CONFIG: LibraryConfig = LibraryConfig()
 RESERVATION_SYSTEM_CONFIG: ReservationConfig = ReservationConfig()
+CIRCUIT_BREAKER_CONFIG: CircuitBreakerConfig = CircuitBreakerConfig()

@@ -2,9 +2,10 @@ from datetime import date
 from enum import Enum
 from uuid import UUID
 
+from pydantic import BaseModel
+
 from gateway_service.apis.library_system_api.schemas import BookModel, Condition, LibraryModel
 from gateway_service.apis.rating_system_api.schemas import UserRating
-from pydantic import BaseModel
 
 
 class Status(Enum):

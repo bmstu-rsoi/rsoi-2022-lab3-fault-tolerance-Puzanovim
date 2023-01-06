@@ -9,21 +9,22 @@ class Condition(Enum):
     EXCELLENT = 'EXCELLENT'
     GOOD = 'GOOD'
     BAD = 'BAD'
+    UNKNOWN = 'UNKNOWN'
 
 
 class LibraryModel(BaseModel):
     libraryUid: UUID
-    name: str
-    city: str
-    address: str
+    name: str = ''
+    city: str = ''
+    address: str = ''
 
 
 class BookModel(BaseModel):
     bookUid: UUID
-    name: str
-    author: str
-    genre: str
-    condition: Condition
+    name: str = ''
+    author: str = ''
+    genre: str = ''
+    condition: Condition = Condition.UNKNOWN
 
 
 class BookInfo(BookModel):
