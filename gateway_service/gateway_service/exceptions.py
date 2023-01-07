@@ -4,3 +4,7 @@ class ValidationError(Exception):
 
 class ServiceNotAvailableError(Exception):
     pass
+
+
+class ServiceTemporaryNotAvailableError(Exception):
+    pass
