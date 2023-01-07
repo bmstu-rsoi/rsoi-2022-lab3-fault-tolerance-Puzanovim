@@ -1,0 +1,2 @@
+class NoFoundRating(Exception):
+    pass
